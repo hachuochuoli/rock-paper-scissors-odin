@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div class="result-container"></div>
+    <div class="score-tracker">
+        <div class="life-tracker" id="player-lives"></div>
+        <div class="life-tracker" id="COM-lives"></div>
+    </div>
+    <div class="player-selection">
+        <button class="select-btn" id="rock">Rock</button>
+        <button class="select-btn" id="paper">Paper</button>
+        <button class="select-btn" id="scissors">Scissors</button>
+    </div>
+    <div class="reset-container">
+        <button class="reset-btn">RESET</button>
+    </div>
 </body>
 </html>

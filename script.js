@@ -1,3 +1,60 @@
+let resultContainer = document.querySelector(".result-container");
+let rock = document.querySelector("#rock");
+let scissors = document.querySelector("#scissors");
+let paper = document.querySelector("#paper");
+let reset = document.querySelector('.reset-btn');
+let playerSelection;
+let computer_lives = 3;
+let player_lives = 3;
+
+// Player selects rock, paper or scissors
+// Game round function is triggered
+//    embez de return win en game round, modifica el valor de vidas
+//    game function detecta cuando cantidad de vidas llega a zero
+//    dentro del game function nulifica los botones despues de que un jugador pierde, considera reset button
+
+
+paper.addEventListener("click",() => {
+    if(player_lives > 0 && computer_lives > 0) {
+        game_round("PAPER",getComputerChoice());
+        game();
+    }
+})
+
+rock.addEventListener("click", () => {
+    if(player_lives > 0 && computer_lives > 0) {
+        game_round("ROCK",getComputerChoice());
+        game()
+    }
+})
+
+scissors.addEventListener("click", () => {
+    if(player_lives > 0 && computer_lives > 0) {
+        game_round("SCISSORS",getComputerChoice());
+        game();
+    }
+})
+
+reset.addEventListener("click", ()=> {
+    resultContainer.replaceChildren();
+    player_lives=3;
+    computer_lives=3;
+    updateLives();
+})
+//resultContainer.replaceChildren() to remove
+
+
+function resultAppend(string) {
+    let result = document.createElement("p");
+    result.textContent = string;
+    resultContainer.appendChild(result);
+}
+
+function updateLives() {
+    document.querySelector('#player-lives').textContent = `Player lives left is: ${player_lives}`;
+    document.querySelector('#COM-lives').textContent = `COM lives left is: ${computer_lives}`;
+}
+
 function getComputerChoice() {
 let randomNum = Math.random();
 if (randomNum < .333333333) {
@@ -7,81 +64,75 @@ if (randomNum < .333333333) {
 } else {return "PAPER";}
 }
 
-function getPlayerChoice() {
-    let playerSelection;
-    while (playerSelection != "ROCK" && playerSelection != "PAPER" && playerSelection != "SCISSORS"){
-        playerSelection = prompt("Select rock, paper, or scissors").toUpperCase();
-        if (playerSelection != "ROCK" && playerSelection != "PAPER" && playerSelection != "SCISSORS") alert("Invalid input");
-    }
-    return playerSelection;
-}
+//function getPlayerChoice() {
+  //  let playerSelection;
+    //while (playerSelection != "ROCK" && playerSelection != "PAPER" && playerSelection != "SCISSORS"){
+      //  playerSelection = prompt("Select rock, paper, or scissors").toUpperCase();
+        //if (playerSelection != "ROCK" && playerSelection != "PAPER" && playerSelection != "SCISSORS") alert("Invalid input");
+    //}
+    //return playerSelection;
+//}
 
 function game_round (playerSelection, computerSelection){
+    resultContainer.replaceChildren();
     if (playerSelection == "ROCK") {
         if (computerSelection == "ROCK") {
-            alert("Computer chose rock, This round is a tie");
-            return "tie";
+            resultAppend("Computer chose rock, This round is a tie");
+            updateLives();
         } else if (computerSelection == "PAPER") {
-            alert("Computer chose paper, You lose this round");
-            return "loss";
+            resultAppend("Computer chose paper, You lose this round");
+            player_lives = player_lives -1;
+            updateLives();
         } else if (computerSelection == "SCISSORS") {
-            alert("Computer chose scissors, You win this round");
-            return "win";
+            resultAppend("Computer chose scissors, You win this round");
+            computer_lives=computer_lives-1;
+            updateLives();
         }
     }
     else if (playerSelection == "PAPER") {
         if (computerSelection == "ROCK") {
-            alert("Computer chose rock, You win this round");
-            return "win";
+            resultAppend("Computer chose rock, You win this round");
+            computer_lives=computer_lives-1;
+            updateLives();
         }
         else if (computerSelection == "PAPER") {
-            alert("Computer chose paper. This round is a tie");
-            return "tie";
+            resultAppend("Computer chose paper. This round is a tie");
+            updateLives();
         }
         else if (computerSelection =="SCISSORS") {
-            alert("Computer chose scissors, You lose this round");
-            return "loss";
+            resultAppend("Computer chose scissors, You lose this round");
+            player_lives=player_lives-1;
+            updateLives();
         }
     }
     else if (playerSelection == "SCISSORS") {
         if (computerSelection == "ROCK") {
-            alert("computer chose rock, You lose this round");
-            return "loss";
+            resultAppend("computer chose rock, You lose this round");
+            player_lives = player_lives-1;
+            updateLives();
         }
         else if (computerSelection == "PAPER") {
-            alert("computer chose paper, you win this round");
-            return "win";
+            resultAppend("computer chose paper, you win this round");
+            computer_lives = computer_lives-1;
+            updateLives();
         }
         else if (computerSelection == "SCISSORS") {
-            alert("Computer chose scissors. This round is a tie")
-            return "tie";
+            resultAppend("Computer chose scissors. This round is a tie")
+            updateLives();
         }
     }
+    resultAppend("New round, select rock, paper or scissors");
 }
 
 function game() {
-    let computer_lives = 3;
-    let player_lives = 3;
-
-    while (computer_lives > 0 && player_lives > 0) {
-         let round_result = "tbd";
-         round_result = game_round(getPlayerChoice(),getComputerChoice());
-         if (round_result === "win"){
-            computer_lives--;
-            alert(`Player lives left is: ${player_lives}, computer lives left is: ${computer_lives} `)
-         }
-         else if (round_result === "tie") {
-            alert(`Player lives left is: ${player_lives}, computer lives left is: ${computer_lives} `)
-         }
-         else if (round_result === "loss") {
-            player_lives--;
-            alert(`Player lives left is: ${player_lives}, computer lives left is: ${computer_lives} `)
-         }
-    }
 
     if (player_lives == 0) {
-        alert("You lose");
+        resultContainer.replaceChildren();
+        resultAppend('You lose :(');
     } else if (computer_lives == 0) {
-        alert("You win");
+        resultContainer.replaceChildren();
+        resultAppend('You win');
     }
 }
+
+updateLives();
